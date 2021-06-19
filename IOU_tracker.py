@@ -57,29 +57,9 @@ class IOU_tracker():
             IOU_max = 0
             IOU_now = 0
             for k in range(len(self.boxes_draw_bef)):
-                if (self.boxes_draw_bef[k][1] < boxes_draw[j][1]) and (boxes_draw[j][1] < self.boxes_draw_bef[k][3])\
-                    and (self.classes_draw_bef[k] == classes_draw[j]): #bef xmin <= now xmin
-                    if (boxes_draw[j][0] < self.boxes_draw_bef[k][0]) and (self.boxes_draw_bef[k][0] < boxes_draw[j][2]): #bef ymin <= now ymin
-                        IOU_now = ((self.boxes_draw_bef[k][3] - boxes_draw[j][1])*(self.boxes_draw_bef[k][2] - boxes_draw[j][0]))/\
-                        abs((self.boxes_draw_bef[k][2] - self.boxes_draw_bef[k][0])*(self.boxes_draw_bef[k][3] - self.boxes_draw_bef[k][1]))
-                    elif (self.boxes_draw_bef[k][0] < boxes_draw[j][0]) and (boxes_draw[j][0] < self.boxes_draw_bef[k][2]):
-                        IOU_now = ((self.boxes_draw_bef[k][3] - boxes_draw[j][1])*(boxes_draw[j][2] - self.boxes_draw_bef[k][0]))/\
-                        abs((self.boxes_draw_bef[k][2] - self.boxes_draw_bef[k][0])*(self.boxes_draw_bef[k][3] - self.boxes_draw_bef[k][1]))
-                    else:
-                        IOU_now = 0
-
-                elif (boxes_draw[j][1] <= self.boxes_draw_bef[k][1]) and (self.boxes_draw_bef[k][1] < boxes_draw[j][3])\
-                      and (self.classes_draw_bef[k] == classes_draw[j]):
-                    if (boxes_draw[j][0] < self.boxes_draw_bef[k][0]) and (self.boxes_draw_bef[k][0] < boxes_draw[j][2]):
-                        IOU_now = ((boxes_draw[j][3] - self.boxes_draw_bef[k][1])*(self.boxes_draw_bef[k][2] - boxes_draw[j][0]))/\
-                        abs((self.boxes_draw_bef[k][2] - self.boxes_draw_bef[k][0])*(self.boxes_draw_bef[k][3] - self.boxes_draw_bef[k][1]))
-                    elif (self.boxes_draw_bef[k][0] < boxes_draw[j][0]) and (boxes_draw[j][0] < self.boxes_draw_bef[k][2]):
-                        IOU_now = ((boxes_draw[j][3] - self.boxes_draw_bef[k][1])*(boxes_draw[j][2] - self.boxes_draw_bef[k][0]))/\
-                        abs((self.boxes_draw_bef[k][2] - self.boxes_draw_bef[k][0])*(self.boxes_draw_bef[k][3] - self.boxes_draw_bef[k][1]))       
-                    else:
-                        IOU_now = 0
-                else:
-                    IOU_now = 0
+                IOU_now = (min(self.boxes_draw_bef[k][3],boxes_draw[j][3]) - max(self.boxes_draw_bef[k][1],boxes_draw[j][1]))*\
+                (min(self.boxes_draw_bef[k][2],boxes_draw[j][2]) - max(self.boxes_draw_bef[k][0],boxes_draw[j][0]))/\
+                ((self.boxes_draw_bef[k][2]-self.boxes_draw_bef[k][0])*(self.boxes_draw_bef[k][3]-self.boxes_draw_bef[k][1]))
 
                 if (IOU_max < IOU_now) and (IOU_now > 0.5):
                     IOU_max = IOU_now
